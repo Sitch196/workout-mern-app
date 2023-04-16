@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import WorkoutDetails from "../Components/WorkoutDetails";
+import WorkoutForm from "../Components/WorkoutForm";
 
 function Home() {
   const [workouts, setWorkouts] = useState([]);
+
+  const addWorkout = (workout) => {
+    setWorkouts([...workouts, workout]);
+  };
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -19,10 +24,12 @@ function Home() {
   return (
     <div className="home">
       <div className="workouts">
-        {workouts.map((workout) => {
-          return <WorkoutDetails key={workout._id} workout={workout} />;
-        })}
+        {workouts &&
+          workouts.map((workout) => {
+            return <WorkoutDetails key={workout._id} workout={workout} />;
+          })}
       </div>
+      <WorkoutForm onAddWorkout={addWorkout} />
     </div>
   );
 }
