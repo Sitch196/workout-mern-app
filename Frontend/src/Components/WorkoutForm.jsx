@@ -43,6 +43,7 @@ const WorkoutForm = (props) => {
         type="text"
         onChange={(e) => setTitle(e.target.value)}
         value={title}
+        required
       />
       <label> Load (kg):</label>
       <input
@@ -57,7 +58,7 @@ const WorkoutForm = (props) => {
         value={reps}
       />
       <button>Add Workout</button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{ color: "#e7195a" }}>{error}</p>}
     </form>
   );
 };

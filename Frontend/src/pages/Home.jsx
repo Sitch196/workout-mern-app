@@ -4,9 +4,16 @@ import WorkoutForm from "../Components/WorkoutForm";
 
 function Home() {
   const [workouts, setWorkouts] = useState([]);
+  const [error, setError] = useState(null);
 
   const addWorkout = (workout) => {
     setWorkouts([...workouts, workout]);
+  };
+  const handleDelete = (deleteWorkoutId) => {
+    const updatedWorkouts = workouts.filter(
+      (workout) => workout._id !== deleteWorkoutId
+    );
+    setWorkouts(updatedWorkouts);
   };
 
   useEffect(() => {
@@ -15,7 +22,11 @@ function Home() {
       const data = await response.json();
       if (response.ok) {
         setWorkouts(data);
+        setError(false);
         console.log(data);
+      }
+      if (!response.ok) {
+        setError(true);
       }
     };
     fetchWorkouts();
@@ -23,12 +34,21 @@ function Home() {
 
   return (
     <div className="home">
-      <div className="workouts">
-        {workouts &&
-          workouts.map((workout) => {
-            return <WorkoutDetails key={workout._id} workout={workout} />;
-          })}
-      </div>
+      {!error && (
+        <div className="workouts">
+          {workouts.length > 0 &&
+            workouts.map((workout) => {
+              return (
+                <WorkoutDetails
+                  key={workout._id}
+                  workout={workout}
+                  onDelete={handleDelete}
+                />
+              );
+            })}
+          {error && <h1>Failed to Fetch</h1>}
+        </div>
+      )}
       <WorkoutForm onAddWorkout={addWorkout} />
     </div>
   );
