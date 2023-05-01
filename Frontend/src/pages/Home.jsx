@@ -25,11 +25,14 @@ function Home() {
       setWorkouts(JSON.parse(storedWorkouts));
     }
     const fetchWorkouts = async () => {
-      const response = await fetch("http://localhost:4000/api/workouts", {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+      const response = await fetch(
+        "https://workout-app-mern-test-start.onrender.com/api/workouts",
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
       const data = await response.json();
       if (response.ok) {
         setWorkouts(data);

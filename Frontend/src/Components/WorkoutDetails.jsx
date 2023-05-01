@@ -8,7 +8,7 @@ function WorkoutDetails({ workout, onDelete }) {
     try {
       if (!user) return;
       const response = await fetch(
-        `http://localhost:4000/api/workouts/${workout._id}`,
+        `https://workout-app-mern-test-start.onrender.com/api/workouts/${workout._id}`,
         {
           method: "DELETE",
           headers: {
