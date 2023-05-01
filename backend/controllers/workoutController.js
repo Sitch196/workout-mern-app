@@ -1,7 +1,8 @@
 const Workout = require("../models/workoutModel");
 
 exports.getWorkouts = async (req, res) => {
-  const workouts = await Workout.find({});
+  const user_id = req.user._id;
+  const workouts = await Workout.find({ user_id });
   res.status(200).json(workouts);
 };
 exports.getWorkout = async (req, res) => {
@@ -19,8 +20,13 @@ exports.getWorkout = async (req, res) => {
 };
 //create a new Workout
 exports.createWorkout = async (req, res) => {
-  const workout = await Workout.create(req.body);
-  res.status(200).json(workout);
+  try {
+    const user_id = req.user._id;
+    const workout = await Workout.create({ ...req.body, user_id });
+    res.status(200).json(workout);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 //update a workout
 exports.deleteWorkout = async (req, res) => {

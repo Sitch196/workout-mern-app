@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import WorkoutDetails from "../Components/WorkoutDetails";
 import WorkoutForm from "../Components/WorkoutForm";
+import { AuthContext } from "../../Context/AuthContext";
 
 function Home() {
+  const { user } = useContext(AuthContext);
+
   const [workouts, setWorkouts] = useState([]);
   const [error, setError] = useState(null);
 
@@ -17,19 +20,30 @@ function Home() {
   };
 
   useEffect(() => {
+    const storedWorkouts = localStorage.getItem("workouts");
+    if (storedWorkouts) {
+      setWorkouts(JSON.parse(storedWorkouts));
+    }
     const fetchWorkouts = async () => {
-      const response = await fetch("http://localhost:4000/api/workouts");
+      const response = await fetch("http://localhost:4000/api/workouts", {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
       const data = await response.json();
       if (response.ok) {
         setWorkouts(data);
         setError(false);
+        localStorage.setItem("workouts", JSON.stringify(data));
+
         console.log(data);
-      }
-      if (!response.ok) {
+      } else {
         setError(true);
       }
     };
-    fetchWorkouts();
+    if (user) {
+      fetchWorkouts();
+    }
   }, []);
 
   return (

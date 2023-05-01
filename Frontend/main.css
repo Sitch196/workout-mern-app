@@ -12,7 +12,7 @@ body {
   font-family: "Poppins";
 }
 header {
-  background: #fff;
+  background: linear-gradient(to bottom left ,whitesmoke, lightgrey)
 }
 
 header .container {
@@ -129,12 +129,13 @@ form.signup, form.login {
   border-radius: 4px;
 }
 nav button{
-  background-color: #fff;
+  background: linear-gradient(to bottom right ,whitesmoke, lightgrey);
   color: var(--primary);
   border: 2px solid var(--primary);
   padding: 6px 10px;
   border-radius: 4px;
   font-family: 'Poppins';
+  font-weight: bold;
   cursor: pointer;
   margin:0 0.5rem;
   font-size: 1rem;

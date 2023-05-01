@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../Context/AuthContext";
 
 const WorkoutForm = (props) => {
+  const { user } = useContext(AuthContext);
   const [title, setTitle] = useState("");
   const [load, setLoad] = useState("");
   const [reps, setReps] = useState("");
@@ -8,6 +10,11 @@ const WorkoutForm = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!user) {
+      setError("You must be logged in");
+      return;
+    }
 
     if (!title || !load || !reps) {
       setError("Please fill in all fields.");
@@ -19,6 +26,7 @@ const WorkoutForm = (props) => {
       body: JSON.stringify(workout),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
       },
     });
     const json = await response.json();

@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
+import { ClipLoader } from "react-spinners";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AuthContext } from "../../Context/AuthContext";
-import { redirect, useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -18,23 +18,23 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const response = await fetch("http://localhost:4000/api/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
     const json = await response.json();
+    setIsLoading(false);
 
     if (!response.ok) {
       setError(json.message);
     }
     if (response.ok) {
       localStorage.setItem("user", JSON.stringify(json));
+      setIsLoading(true);
       setUser(json);
-      navigate("/");
 
-      console.log(json);
       console.log("User Logged In");
     }
   };
@@ -63,7 +63,13 @@ const Login = () => {
         onChange={(e) => setPassword(e.target.value)}
         value={password}
       />
-      <button>Log In</button>
+      <button className="login-button">
+        {isLoading ? (
+          <ClipLoader color={"#ffffff"} loading={isLoading} size={15} />
+        ) : (
+          "Log In"
+        )}
+      </button>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </form>
   );
